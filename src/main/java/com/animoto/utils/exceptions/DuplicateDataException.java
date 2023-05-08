@@ -1,10 +1,10 @@
-package com.animoto.utils.exeptions;
+package com.animoto.utils.exceptions;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class DuplicateDataException extends Exception{
+public class DuplicateDataException extends Exception {
 
     private HttpStatus httpStatus;
 

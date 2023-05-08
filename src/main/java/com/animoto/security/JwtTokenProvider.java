@@ -10,8 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 
@@ -51,10 +49,12 @@ public class JwtTokenProvider {
     }
 
     public String generateToken(int userId, String password, String email) {
-
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + 360000000);
 
         return Jwts.builder()
                 .setSubject(email)
+                .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS256, JWT_TOKEN_SECRET_KEY)
                 .claim("password", password)
                 .claim("userId", userId)

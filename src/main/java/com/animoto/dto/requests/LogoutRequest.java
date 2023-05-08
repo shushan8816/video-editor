@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class LogoutRequest {
+
     @NotNull
     private String token;
 

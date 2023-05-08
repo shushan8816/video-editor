@@ -6,8 +6,7 @@ import com.animoto.models.User;
 import com.animoto.repositories.UserRepository;
 import com.animoto.security.JwtTokenProvider;
 import com.animoto.services.interfaces.AuthService;
-import com.animoto.services.interfaces.UserService;
-import com.animoto.utils.exeptions.JwtAuthenticationException;
+import com.animoto.utils.exceptions.JwtAuthenticationException;
 import com.animoto.utils.helper.JwtTokenCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -37,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
         int userId;
 
         email = loginRequest.getEmail();
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.getByEmail(email);
 
         password = loginRequest.getPassword();
         if (!passwordEncoder.matches(password, user.getPassword())) {
@@ -57,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void loggedOut(LogoutRequest logoutRequest) {
-        String refreshToken = logoutRequest.getToken();
-        jwtTokenCache.markLogoutToken(refreshToken);
+        String token = logoutRequest.getToken();
+        jwtTokenCache.markLogoutToken(token);
     }
 }

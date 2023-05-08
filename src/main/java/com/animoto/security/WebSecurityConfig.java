@@ -1,6 +1,5 @@
 package com.animoto.security;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -40,8 +39,9 @@ public class WebSecurityConfig {
                         "/swagger-ui.html",
                         "/webjars/**",
                         "/swagger-resources/**",
-                        "/v3/api-docs/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                        "/v3/api-docs/**", "/media-file/**", "/api/auth/**" ).permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/**","/media-file/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/media-file/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
