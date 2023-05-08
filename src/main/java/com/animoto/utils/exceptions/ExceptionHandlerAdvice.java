@@ -53,18 +53,6 @@ public class ExceptionHandlerAdvice {
         return new ResponseEntity<>(createErrorResponse(e.getMessage(), HttpStatus.UNAUTHORIZED), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(PreconditionFailedException.class)
-    public ResponseEntity<?> handlePreconditionFailedException(PreconditionFailedException e) {
-        return new ResponseEntity<>(createErrorResponse(e.getMessage(), HttpStatus.PRECONDITION_FAILED), HttpStatus.PRECONDITION_FAILED);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
-        String errorMessage = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
-
-        return new ResponseEntity<>(this.createErrorResponse(errorMessage, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> processConversionException(HttpMessageNotReadableException e) {
 
