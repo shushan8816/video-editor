@@ -39,8 +39,10 @@ public class WebSecurityConfig {
                         "/swagger-ui.html",
                         "/webjars/**",
                         "/swagger-resources/**",
-                        "/v3/api-docs/**", "/media-file/**", "/api/auth/**" ).permitAll()
-                .antMatchers(HttpMethod.POST, "/api/auth/**","/media-file/**").permitAll()
+                        "/v3/api-docs/**",
+                        "/media-file/**",
+                        "/auth/**" ).permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/**","/media-file/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/media-file/**").permitAll()
                 .anyRequest()
                 .authenticated()

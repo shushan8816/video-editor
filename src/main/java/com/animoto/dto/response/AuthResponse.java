@@ -9,7 +9,7 @@ import java.io.Serializable;
 @RequiredArgsConstructor
 public class AuthResponse implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private int userId;
 
-    private final String jwt;
+    private  String jwtToken;
 }

@@ -38,6 +38,7 @@ public class JwtTokenCache {
             long expiryForToken = this.getExpiryForToken(tokenExpiryDate);
             log.info(String.format("Logout token cache set for [%s] with a expiry of [%s] seconds. Token is due expiry at [%s]", email, expiryForToken, tokenExpiryDate));
             jwtTokenBlacklist.put(email, token);
+            log.info("Logout successful");
         }
     }
 }

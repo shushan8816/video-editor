@@ -36,20 +36,27 @@ public class AuthServiceImpl implements AuthService {
         int userId;
 
         email = loginRequest.getEmail();
-        User user = userRepository.getByEmail(email);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new JwtAuthenticationException("Incorrect email", HttpStatus.UNAUTHORIZED));
 
         password = loginRequest.getPassword();
         if (!passwordEncoder.matches(password, user.getPassword())) {
             log.info("Password is not valid");
-            throw new JwtAuthenticationException("Incorrect email or password", HttpStatus.UNAUTHORIZED);
+            throw new JwtAuthenticationException("Incorrect password", HttpStatus.UNAUTHORIZED);
         }
 
         userId = user.getId();
         String token = jwtTokenProvider.generateToken(userId, password, email);
 
+        return this.createAuthResponse(userId, token);
+
+    }
+
+    private Map<String, Object> createAuthResponse(int userId, String jwtToken) {
+
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("userId", userId);
-        response.put("token", token);
+        response.put("token", jwtToken);
 
         return response;
     }

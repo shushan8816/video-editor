@@ -7,7 +7,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.6</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>com</groupId>
@@ -23,7 +22,10 @@
         <springdoc-openapi-security.version>1.6.13</springdoc-openapi-security.version>
         <jjwt.version>0.9.1</jjwt.version>
         <lombok.version>1.18.24</lombok.version>
+        <ffmpeg.version>0.6.2</ffmpeg.version>
+        <commons-fileupload.version>1.5</commons-fileupload.version>
     </properties>
+
 
     <dependencies>
         <dependency>
@@ -83,15 +85,13 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.4</version>
+            <version>${commons-fileupload.version}</version>
         </dependency>
         <dependency>
             <groupId>net.bramp.ffmpeg</groupId>
             <artifactId>ffmpeg</artifactId>
-            <version>0.6.2</version>
+            <version>${ffmpeg.version}</version>
         </dependency>
-
-
     </dependencies>
 
     <build>

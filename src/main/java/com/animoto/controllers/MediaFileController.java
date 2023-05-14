@@ -1,6 +1,7 @@
 package com.animoto.controllers;
 
-import com.animoto.repositories.MediaFileRepository;
+import com.animoto.dto.requests.ConcatenateFilesRequest;
+import com.animoto.dto.requests.TrimMediaFileRequest;
 import com.animoto.services.interfaces.MediaFileService;
 import com.animoto.utils.exceptions.BadRequestException;
 import com.animoto.utils.exceptions.InternalErrorException;
@@ -12,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/media-file")
@@ -20,25 +21,35 @@ import java.io.FileNotFoundException;
 public class MediaFileController {
 
     private final MediaFileService mediaFileService;
-    private final MediaFileRepository mediaFileRepository;
 
+    @GetMapping(value = "/{fileId}", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<byte[]> downloadMediaFile(@PathVariable int fileId,
+                                                    @Parameter(hidden = true) @RequestHeader HttpHeaders headers) throws IOException {
+        return ResponseEntity.ok(mediaFileService.getMediaFile(fileId, headers));
+    }
 
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Void> uploadFile(@RequestPart MultipartFile file,
-                                           @Parameter(hidden = true) @RequestHeader HttpHeaders headers) throws BadRequestException, InternalErrorException {
+    @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Void> uploadMediaFile(@RequestPart MultipartFile file,
+                                                @Parameter(hidden = true) @RequestHeader HttpHeaders headers) throws BadRequestException, InternalErrorException {
         mediaFileService.uploadMediaFile(file, headers);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/{fileId}", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public ResponseEntity<byte[]> getMediaFile(@PathVariable int fileId,
-                                               @Parameter(hidden = true) @RequestHeader HttpHeaders headers) throws FileNotFoundException {
-        return ResponseEntity.ok(mediaFileService.getMediaFile(fileId, headers));
+    @PostMapping("/trim")
+    public ResponseEntity<Void> trimVideo(@RequestBody TrimMediaFileRequest trimMediaFileRequest) throws IOException {
+        mediaFileService.trimMediaFile(trimMediaFileRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/concatenate")
+    public ResponseEntity<Void> concatenateVideos(@RequestBody ConcatenateFilesRequest concatenateFilesRequest) throws IOException {
+        mediaFileService.concatenateFiles(concatenateFilesRequest.getFileIds());
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{fileId}")
     public ResponseEntity<Void> deleteMediaFile(@PathVariable(value = "fileId") int fileId) {
-        mediaFileRepository.deleteById(fileId);
+        mediaFileService.delete(fileId);
         return ResponseEntity.ok().build();
     }
 }
